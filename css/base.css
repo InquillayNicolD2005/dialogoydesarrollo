@@ -1,0 +1,15 @@
+/* Base styles and project variables. */
+:root {
+  --color-primary: #e0020d;
+  --color-text: #212529;
+  --color-surface: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
