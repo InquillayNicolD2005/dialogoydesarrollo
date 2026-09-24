@@ -109,6 +109,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (($definition['title'] ?? null) && $data[$definition['title']] === '') {
                 throw new InvalidArgumentException('El título es obligatorio.');
             }
+            if (isset($definition['status'])) {
+                $data['estado'] = in_array($_POST['estado'] ?? '', ['borrador', 'publicado', 'archivado'], true)
+                    ? (string) $_POST['estado']
+                    : 'borrador';
+            }
             if ($type === 'reportajes' && isset($data['desarrollo'])) {
                 $data['desarrollo'] = strip_tags(
                     $data['desarrollo'],

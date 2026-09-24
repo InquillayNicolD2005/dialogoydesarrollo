@@ -28,11 +28,11 @@ function videoEmbedUrl(string $url): string
 }
 
 $queries = [
-    ["SELECT id, titulo, fecha_publicacion AS fecha, foto AS imagen, link_externo AS enlace, 'Actualidad' AS tipo FROM noticias ORDER BY fecha_publicacion DESC, id DESC LIMIT 3"],
-    ["SELECT r.id, r.titulo, r.fecha_publicacion AS fecha, r.foto_principal AS imagen, '' AS enlace, 'Reportajes' AS tipo, r.es_destacado AS destacado, COALESCE(CONCAT(a.nombres, ' ', a.ap_paterno), '') AS autor FROM reportajes r LEFT JOIN autores a ON a.id = r.autor_id ORDER BY r.fecha_publicacion DESC, r.id DESC"],
-    ["SELECT id, CONCAT('Boletín N.º ', numero_boletin) AS titulo, fecha_publicacion AS fecha, foto_portada AS imagen, archivo_pdf AS enlace, 'Boletines' AS tipo FROM boletines ORDER BY fecha_publicacion DESC, id DESC LIMIT 6"],
-    ["SELECT id, titulo, fecha_publicacion AS fecha, '' AS imagen, url_embed AS enlace, 'Podcasts' AS tipo FROM podcasts ORDER BY fecha_publicacion DESC, id DESC LIMIT 6"],
-    ["SELECT id, titulo, fecha_publicacion AS fecha, imagen, url_embed AS enlace, 'Videos' AS tipo FROM videos ORDER BY fecha_publicacion DESC, id DESC LIMIT 6"],
+    ["SELECT id, titulo, fecha_publicacion AS fecha, foto AS imagen, link_externo AS enlace, 'Actualidad' AS tipo FROM noticias WHERE estado = 'publicado' ORDER BY fecha_publicacion DESC, id DESC LIMIT 3"],
+    ["SELECT r.id, r.titulo, r.fecha_publicacion AS fecha, r.foto_principal AS imagen, '' AS enlace, 'Reportajes' AS tipo, r.es_destacado AS destacado, COALESCE(CONCAT(a.nombres, ' ', a.ap_paterno), '') AS autor FROM reportajes r LEFT JOIN autores a ON a.id = r.autor_id WHERE r.estado = 'publicado' ORDER BY r.fecha_publicacion DESC, r.id DESC"],
+    ["SELECT id, CONCAT('Boletín N.º ', numero_boletin) AS titulo, fecha_publicacion AS fecha, foto_portada AS imagen, archivo_pdf AS enlace, 'Boletines' AS tipo FROM boletines WHERE estado = 'publicado' ORDER BY fecha_publicacion DESC, id DESC LIMIT 6"],
+    ["SELECT id, titulo, fecha_publicacion AS fecha, '' AS imagen, url_embed AS enlace, 'Podcasts' AS tipo FROM podcasts WHERE estado = 'publicado' ORDER BY fecha_publicacion DESC, id DESC LIMIT 6"],
+    ["SELECT id, titulo, fecha_publicacion AS fecha, imagen, url_embed AS enlace, 'Videos' AS tipo FROM videos WHERE estado = 'publicado' ORDER BY fecha_publicacion DESC, id DESC LIMIT 6"],
 ];
 
 try {

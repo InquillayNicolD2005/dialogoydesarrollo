@@ -13,7 +13,7 @@ $definitions = [
     'videos' => ['title' => 'Video', 'table' => 'videos', 'image' => 'imagen', 'description' => 'descripcion', 'link' => 'url_embed'],
 ];
 $definition = $definitions[$type] ?? $definitions['noticias'];
-$query = database()->prepare(sprintf('SELECT * FROM `%s` WHERE id = :id LIMIT 1', $definition['table']));
+$query = database()->prepare(sprintf("SELECT * FROM `%s` WHERE id = :id AND estado = 'publicado' LIMIT 1", $definition['table']));
 $query->execute(['id' => $id]);
 $row = $query->fetch();
 

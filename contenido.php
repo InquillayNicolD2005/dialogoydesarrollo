@@ -13,7 +13,7 @@ $definitions = [
 ];
 $definition = $definitions[$type] ?? $definitions['noticias'];
 $limit = $type === 'noticias' ? ' LIMIT 3' : '';
-$rows = database()->query(sprintf('SELECT * FROM `%s` ORDER BY `%s` DESC, `%s` DESC%s', $definition['table'], $definition['date'], $definition['id'], $limit))->fetchAll();
+$rows = database()->query(sprintf("SELECT * FROM `%s` WHERE estado = 'publicado' ORDER BY `%s` DESC, `%s` DESC%s", $definition['table'], $definition['date'], $definition['id'], $limit))->fetchAll();
 
 function publicValue(?string $value): string
 {
