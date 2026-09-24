@@ -7,6 +7,26 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 
+function videoEmbedUrl(string $url): string
+{
+    $parts = parse_url($url);
+    if (!$parts || empty($parts['host'])) {
+        return '';
+    }
+    $host = strtolower((string) $parts['host']);
+    if (str_contains($host, 'youtu.be')) {
+        return 'https://www.youtube.com/embed/' . rawurlencode(trim((string) $parts['path'], '/'));
+    }
+    if (str_contains($host, 'youtube.com')) {
+        parse_str((string) ($parts['query'] ?? ''), $query);
+        return !empty($query['v']) ? 'https://www.youtube.com/embed/' . rawurlencode((string) $query['v']) : '';
+    }
+    if (str_contains($host, 'vimeo.com')) {
+        return 'https://player.vimeo.com/video/' . rawurlencode(trim((string) $parts['path'], '/'));
+    }
+    return '';
+}
+
 $queries = [
     ["SELECT id, titulo, fecha_publicacion AS fecha, foto AS imagen, link_externo AS enlace, 'Actualidad' AS tipo FROM noticias ORDER BY fecha_publicacion DESC, id DESC LIMIT 3"],
     ["SELECT r.id, r.titulo, r.fecha_publicacion AS fecha, r.foto_principal AS imagen, '' AS enlace, 'Reportajes' AS tipo, r.es_destacado AS destacado, COALESCE(CONCAT(a.nombres, ' ', a.ap_paterno), '') AS autor FROM reportajes r LEFT JOIN autores a ON a.id = r.autor_id ORDER BY r.fecha_publicacion DESC, r.id DESC"],
@@ -28,6 +48,7 @@ try {
                 'tipo' => (string) ($item['tipo'] ?? ''),
                 'autor' => (string) ($item['autor'] ?? ''),
                 'destacado' => (int) ($item['destacado'] ?? 0),
+                'video' => ($item['tipo'] ?? '') === 'Videos' ? videoEmbedUrl((string) ($item['enlace'] ?? '')) : '',
             ];
         }
     }

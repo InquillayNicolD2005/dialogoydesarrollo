@@ -1093,7 +1093,8 @@
                     specialsList.innerHTML = videos.map(function (item, index) {
                         var link = item.detalle || item.enlace || 'contenido.php?tipo=videos';
                         var image = item.imagen || 'assets/images/' + videoImages[index % videoImages.length];
-                        return '<div class="item"><div class="d-grid team-info"><div class="column position-relative"><a target="_blank" href="' + escapeHtml(link) + '"><img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.titulo) + '" class="img-fluid rounded team-image"></a></div><div class="column"><p><a target="_blank" href="' + escapeHtml(link) + '">' + escapeHtml(item.titulo) + '</a></p><small>' + escapeHtml(item.fecha) + '</small></div></div></div>';
+                        var media = item.video ? '<iframe class="inline-video" src="' + escapeHtml(item.video) + '" title="' + escapeHtml(item.titulo) + '" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>' : '<a target="_blank" href="' + escapeHtml(link) + '"><img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.titulo) + '" class="img-fluid rounded team-image"></a>';
+                        return '<div class="item"><div class="d-grid team-info"><div class="column position-relative">' + media + '</div><div class="column"><p><a target="_blank" href="' + escapeHtml(link) + '">' + escapeHtml(item.titulo) + '</a></p><small>' + escapeHtml(item.fecha) + '</small></div></div></div>';
                     }).join('');
                     if (carouselWasInitialized) {
                         jQuery(specialsList).owlCarousel({

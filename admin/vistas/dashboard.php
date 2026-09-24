@@ -40,6 +40,8 @@ foreach (array_values($chartItems) as $index => $value) {
       <a href="contenido.php?tipo=boletines">Boletines</a>
       <a href="contenido.php?tipo=podcasts">Podcasts</a>
       <a href="contenido.php?tipo=videos">Videos</a>
+      <a href="usuarios.php">Usuarios y roles</a>
+      <a href="autores.php">Autores</a>
       <a href="../index.html">Ver sitio público</a>
     </nav>
   </aside>
