@@ -16,6 +16,9 @@ a { color: inherit; text-decoration: none; }
 .topbar { display: flex; align-items: center; justify-content: space-between; padding: 21px 34px; background: #fff; border-bottom: 1px solid var(--line); }
 .topbar-actions { display: flex; align-items: center; gap: 12px; }
 .welcome { color: var(--muted); font-size: 13px; }
+.role-badge { display: inline-block; margin-left: 6px; padding: 3px 7px; color: var(--brand); background: #fff1f2; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .04em; }
+.role-editor { color: #175cd3; background: #eff8ff; }
+.role-redactor { color: #b54708; background: #fffaeb; }
 .logout-link { padding: 9px 13px; color: #b42318; border: 1px solid #fecdca; border-radius: 7px; font-size: 13px; font-weight: 700; }
 .topbar h1 { margin: 0; font-size: 22px; }
 .topbar p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }

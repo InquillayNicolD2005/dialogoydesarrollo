@@ -35,7 +35,7 @@ function authenticateAdmin(string $username, string $password): bool
         "SELECT id, nombres, ap_paterno, ap_materno, rol, password_hash
          FROM usuarios
          WHERE nombres = :username
-             AND rol = 'admin'
+             AND rol IN ('admin', 'editor', 'redactor')
          LIMIT 1"
     );
     $query->execute(['username' => $username]);
@@ -164,5 +164,25 @@ function resetAdminPassword(string $token, string $newPassword): bool
     } catch (Throwable $exception) {
         $connection->rollBack();
         throw $exception;
+    }
+}
+
+function adminRole(): string
+{
+    startAdminSession();
+    return (string) ($_SESSION['admin_role'] ?? '');
+}
+
+function isAdministrator(): bool
+{
+    return adminRole() === 'admin';
+}
+
+function requireAdministrator(): void
+{
+    requireAdmin();
+    if (!isAdministrator()) {
+        http_response_code(403);
+        exit('No tienes permisos para realizar esta acción.');
     }
 }

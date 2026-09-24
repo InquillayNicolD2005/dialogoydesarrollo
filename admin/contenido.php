@@ -24,6 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new InvalidArgumentException('La sesión del formulario expiró. Recarga la página e inténtalo nuevamente.');
         }
         if ($action === 'delete' && $postedId > 0) {
+            if (!isAdministrator()) {
+                throw new InvalidArgumentException('Solo un administrador puede eliminar contenido.');
+            }
             deleteContent($type, $postedId);
             $notice = 'El registro fue eliminado.';
         } else {
