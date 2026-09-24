@@ -81,6 +81,11 @@ td.title { max-width: 420px; font-weight: 600; }
 .content-form label { display: grid; gap: 6px; color: #475467; font-size: 12px; font-weight: 700; }
 .content-form input, .content-form textarea { width: 100%; padding: 10px 11px; color: var(--ink); background: #fff; border: 1px solid #cbd2dc; border-radius: 6px; font: inherit; font-size: 13px; }
 .content-form textarea { resize: vertical; }
+.editor-toolbar { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; background: #f8f9fa; border: 1px solid #cbd2dc; border-bottom: 0; border-radius: 6px 6px 0 0; }
+.editor-toolbar button { min-height: 32px; padding: 5px 9px; color: #475467; background: #fff; border: 1px solid #cbd2dc; border-radius: 4px; cursor: pointer; }
+.editor-toolbar button:hover { color: var(--brand); border-color: var(--brand); }
+.rich-editor { min-height: 190px; padding: 12px; color: var(--ink); background: #fff; border: 1px solid #cbd2dc; border-radius: 0 0 6px 6px; font-size: 13px; line-height: 1.6; }
+.rich-editor:focus { outline: 2px solid #f5b6ba; border-color: var(--brand); }
 .content-form select { width: 100%; padding: 10px 11px; color: var(--ink); background: #fff; border: 1px solid #cbd2dc; border-radius: 6px; font: inherit; font-size: 13px; }
 .content-form input:focus, .content-form textarea:focus, .content-form select:focus { outline: 2px solid #f5b6ba; border-color: var(--brand); }
 .form-guide { padding: 10px 12px; color: #475467; background: #f8f9fa; border-left: 3px solid var(--brand); border-radius: 4px; font-size: 12px; line-height: 1.5; }

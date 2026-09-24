@@ -106,6 +106,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (($definition['title'] ?? null) && $data[$definition['title']] === '') {
                 throw new InvalidArgumentException('El título es obligatorio.');
             }
+            if ($type === 'reportajes' && isset($data['desarrollo'])) {
+                $data['desarrollo'] = strip_tags(
+                    $data['desarrollo'],
+                    '<p><br><strong><em><u><ul><ol><li><h3><h4>'
+                );
+            }
             if (($definition['number'] ?? null) && (int) $data[$definition['number']] < 1) {
                 throw new InvalidArgumentException('El número del boletín debe ser mayor que cero.');
             }

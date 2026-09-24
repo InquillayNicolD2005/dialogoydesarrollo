@@ -36,5 +36,28 @@ $featuredCount = $isReportaje ? count(array_filter($rows, static fn (array $row)
     </main>
   </div>
 </div>
+<script>
+document.querySelectorAll('textarea[name="desarrollo"]').forEach(function (textarea) {
+  var toolbar = document.createElement('div');
+  toolbar.className = 'editor-toolbar';
+  toolbar.innerHTML = '<button type="button" data-command="bold"><b>B</b></button><button type="button" data-command="italic"><i>I</i></button><button type="button" data-command="underline"><u>U</u></button><button type="button" data-command="insertUnorderedList">Lista</button><button type="button" data-command="insertOrderedList">Numerada</button>';
+  var editor = document.createElement('div');
+  editor.className = 'rich-editor';
+  editor.contentEditable = 'true';
+  editor.innerHTML = textarea.value ? '<p>' + textarea.value.replace(/\n/g, '</p><p>') + '</p>' : '<p><br></p>';
+  textarea.hidden = true;
+  textarea.parentNode.insertBefore(toolbar, textarea);
+  textarea.parentNode.insertBefore(editor, textarea);
+  toolbar.querySelectorAll('button').forEach(function (button) {
+    button.addEventListener('click', function () {
+      editor.focus();
+      document.execCommand(button.dataset.command, false, null);
+    });
+  });
+  textarea.form.addEventListener('submit', function () {
+    textarea.value = editor.innerHTML;
+  });
+});
+</script>
 </body>
 </html>
