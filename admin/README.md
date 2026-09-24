@@ -11,7 +11,7 @@ El panel se abre desde `https://TU_DOMINIO/admin/login.php` o desde el enlace **
 
 InfinityFree no carga automáticamente el archivo `.env` del repositorio en PHP; en producción usa `database.local.php` o variables de entorno del servidor.
 
-Para crear el administrador de prueba `Nicol` con contraseña `12345678`, importa `database/seed-admin.sql` desde phpMyAdmin. La contraseña está almacenada como hash y se verifica con `password_verify()`.
+Para crear el administrador de prueba `Nicol` con contraseña `123456`, importa `database/seed-admin.sql` desde phpMyAdmin. La contraseña está almacenada como hash y se verifica con `password_verify()`.
 
 Después de entrar, cambia inmediatamente esa contraseña desde **Cambiar contraseña**.
 

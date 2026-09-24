@@ -4,6 +4,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/../admin/config/database.php';
 
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 
 $queries = [
     ["SELECT id, titulo, fecha_publicacion AS fecha, foto AS imagen, link_externo AS enlace, 'Actualidad' AS tipo FROM noticias ORDER BY fecha_publicacion DESC, id DESC LIMIT 3"],
