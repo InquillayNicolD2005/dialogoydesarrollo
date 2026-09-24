@@ -56,22 +56,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     throw new InvalidArgumentException('Hubo un problema al subir el archivo. Inténtalo de nuevo.');
                 }
 
-                $originalName = basename((string) $_FILES[$fileField]['name']);
-                $safeName = preg_replace('/[^A-Za-z0-9._-]+/', '-', $originalName);
-                $safeName = $safeName !== '' ? $safeName : 'archivo';
-                $targetDir = str_contains($fileField, 'pdf') ? __DIR__ . '/../boletines/' : __DIR__ . '/../assets/images/';
+                $isPdf = str_contains($fileField, 'pdf');
+                $maxSize = $isPdf ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+                if ((int) $_FILES[$fileField]['size'] > $maxSize) {
+                    throw new InvalidArgumentException($isPdf ? 'El PDF no puede superar 10 MB.' : 'La imagen no puede superar 5 MB.');
+                }
+                $mime = (new finfo(FILEINFO_MIME_TYPE))->file((string) $_FILES[$fileField]['tmp_name']);
+                $extensions = $isPdf
+                    ? ['application/pdf' => 'pdf']
+                    : ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif'];
+                if (!isset($extensions[$mime])) {
+                    throw new InvalidArgumentException($isPdf ? 'El archivo debe ser un PDF válido.' : 'La imagen debe ser JPG, PNG, WEBP o GIF.');
+                }
+                $safeName = bin2hex(random_bytes(12)) . '.' . $extensions[$mime];
+                $targetDir = $isPdf ? __DIR__ . '/../boletines/' : __DIR__ . '/../assets/images/';
                 if (!is_dir($targetDir)) {
                     mkdir($targetDir, 0777, true);
                 }
                 $targetPath = $targetDir . $safeName;
-                if (file_exists($targetPath)) {
-                    $targetPath = $targetDir . time() . '-' . $safeName;
-                }
                 if (!move_uploaded_file($_FILES[$fileField]['tmp_name'], $targetPath)) {
                     throw new InvalidArgumentException('No se pudo guardar el archivo seleccionado.');
                 }
 
-                $storedValue = str_contains($fileField, 'pdf') ? 'boletines/' . basename($targetPath) : 'assets/images/' . basename($targetPath);
+                $storedValue = $isPdf ? 'boletines/' . $safeName : 'assets/images/' . $safeName;
                 $data[$fileField] = $storedValue;
                 $hasImageFile = $fileField === 'foto';
             }
