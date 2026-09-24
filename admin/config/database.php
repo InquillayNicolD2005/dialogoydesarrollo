@@ -44,5 +44,22 @@ function database(): PDO
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
 
+    ensureContentStatusColumns($connection, $name);
+
     return $connection;
+}
+
+function ensureContentStatusColumns(PDO $connection, string $databaseName): void
+{
+    $tables = ['noticias', 'reportajes', 'boletines', 'podcasts', 'videos'];
+    $columnCheck = $connection->prepare(
+        'SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database_name AND TABLE_NAME = :table_name AND COLUMN_NAME = \'estado\''
+    );
+
+    foreach ($tables as $table) {
+        $columnCheck->execute(['database_name' => $databaseName, 'table_name' => $table]);
+        if ((int) $columnCheck->fetchColumn() === 0) {
+            $connection->exec("ALTER TABLE `{$table}` ADD COLUMN `estado` ENUM('borrador','publicado','archivado') NOT NULL DEFAULT 'publicado' AFTER `fecha_publicacion`");
+        }
+    }
 }
