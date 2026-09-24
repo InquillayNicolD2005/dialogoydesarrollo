@@ -1090,6 +1090,21 @@
                         return {'&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'}[character];
                     });
                 };
+                var embedUrl = function (value) {
+                    try {
+                        var url = new URL(value);
+                        if (url.hostname.indexOf('youtu.be') !== -1) {
+                            return 'https://www.youtube.com/embed/' + encodeURIComponent(url.pathname.replace(/^\//, ''));
+                        }
+                        if (url.hostname.indexOf('youtube.com') !== -1 && url.searchParams.get('v')) {
+                            return 'https://www.youtube.com/embed/' + encodeURIComponent(url.searchParams.get('v'));
+                        }
+                        if (url.hostname.indexOf('vimeo.com') !== -1) {
+                            return 'https://player.vimeo.com/video/' + encodeURIComponent(url.pathname.replace(/^\//, ''));
+                        }
+                    } catch (error) {}
+                    return '';
+                };
                 var podcasts = items.filter(function (item) { return item.tipo === 'Podcasts'; }).slice(0, 4);
                 var videos = items.filter(function (item) { return item.tipo === 'Videos'; }).slice(0, 8);
                 if (podcastList && podcasts.length) {
