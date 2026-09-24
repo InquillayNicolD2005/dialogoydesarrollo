@@ -1,18 +1,25 @@
 # Acceso al panel administrativo
 
-El panel se abre desde `http://localhost/dialogoydesarrollo/admin/login.php` o desde el enlace **Admin** del sitio público. El acceso consulta la tabla `administrador` de la base `ddp` usando `email_a` y `contraseña_a`.
+El panel se abre desde `https://TU_DOMINIO/admin/login.php` o desde el enlace **Admin** del sitio público. El acceso consulta la tabla `usuarios` de la base MySQL de InfinityFree.
 
-La tabla local está vacía, por lo que primero debes crear un administrador. Genera un hash desde la carpeta del proyecto:
+## Configurar InfinityFree
 
-```powershell
-C:\xampp\php\php.exe -r "echo password_hash('CAMBIA_ESTA_CLAVE', PASSWORD_DEFAULT), PHP_EOL;"
-```
+1. La base configurada actualmente es `if0_42985270_revista_digital`, con host `sql313.infinityfree.com` y usuario `if0_42985270`. Usa la contraseña que muestra **MySQL Databases** en InfinityFree.
+2. Copia `admin/config/database.local.php.example` como `admin/config/database.local.php` y reemplaza sus valores. Este archivo está ignorado por Git y debe subirse manualmente a `admin/config/` mediante el administrador de archivos o FTP.
+3. Importa en phpMyAdmin las tablas de la aplicación (`usuarios`, `autores`, `noticias`, `reportajes`, `boletines`, `podcasts` y `videos`) antes de abrir el panel.
+4. En GitHub, configura `FTP_SERVER`, `FTP_USERNAME` y `FTP_PASSWORD` en **Settings > Secrets and variables > Actions**. El workflow publica el proyecto en `/htdocs/`.
 
-Después copia el hash mostrado en esta consulta de MySQL y cambia los datos por los tuyos:
+InfinityFree no carga automáticamente el archivo `.env` del repositorio en PHP; en producción usa `database.local.php` o variables de entorno del servidor.
+
+Para crear el administrador de prueba `Nicol` con contraseña `12345678`, importa `database/seed-admin.sql` desde phpMyAdmin. La contraseña está almacenada como hash y se verifica con `password_verify()`.
+
+Después de entrar, cambia inmediatamente esa contraseña desde **Cambiar contraseña**.
+
+Si necesitas crear otro administrador, genera el hash en un entorno PHP seguro y ejecuta una consulta como esta en phpMyAdmin de InfinityFree:
 
 ```sql
-INSERT INTO administrador (nombre_a, apellido_a, email_a, contraseña_a)
-VALUES ('Administrador', 'DDP', 'admin@tusitio.com', 'PEGA_AQUI_EL_HASH');
+INSERT INTO usuarios (nombres, ap_paterno, ap_materno, email, password_hash, rol)
+VALUES ('Administrador', 'DDP', '', 'admin@tusitio.com', 'PEGA_AQUI_EL_HASH', 'admin');
 ```
 
 Luego ingresa con el correo y la contraseña que usaste para generar el hash. No guardes la contraseña original en ningún archivo del proyecto.

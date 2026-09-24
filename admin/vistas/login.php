@@ -11,12 +11,12 @@
   <main class="login-card">
     <img class="login-logo" src="../assets/images/logo.png" alt="DDP Noticias">
     <h1>ADMIN DIALOGO Y<br>DESARROLLO</h1>
-    <p class="login-intro">Ingrese sus datos de acceso</p>
+    <p class="login-intro">Ingrese su usuario y contraseña</p>
     <?php if ($notice): ?><div class="login-notice" role="status"><?= e($notice) ?></div><?php endif; ?>
     <?php if ($error): ?><div class="login-error" role="alert"><?= e($error) ?></div><?php endif; ?>
     <form method="post" action="login.php" class="login-form" autocomplete="off">
-      <label class="sr-only" for="nombres">Nombre</label>
-      <input id="nombres" name="nombres" type="text" placeholder="Nombre" autocomplete="off" spellcheck="false" required>
+      <label class="sr-only" for="nombres">Usuario</label>
+      <input id="nombres" name="nombres" type="text" placeholder="Usuario" autocomplete="username" spellcheck="false" required>
       <label class="sr-only" for="password">Contraseña</label>
       <input id="password" name="password" type="password" placeholder="Contraseña" autocomplete="current-password" required>
       <button type="submit">Ingresar</button>

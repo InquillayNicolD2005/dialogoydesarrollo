@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $error = 'Los datos no corresponden a un usuario administrador.';
         } catch (Throwable $exception) {
-            $error = 'No se pudo conectar con la base de datos revista_digital. Verifica que MySQL esté iniciado y que la base esté disponible en XAMPP.';
+            $error = 'No se pudo conectar con la base de datos. Verifica las credenciales y el hostname de InfinityFree.';
         }
     }
 }

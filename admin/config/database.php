@@ -9,11 +9,34 @@ function database(): PDO
         return $connection;
     }
 
-    $host = getenv('REVISTA_DB_HOST') ?: 'sql105.infinityfree.com'; // Reemplaza "sql105" por el Hostname de la sección MySQL Databases de InfinityFree
-    $name = getenv('REVISTA_DB_NAME') ?: 'if0_42985270_revista';  // El nombre completo de la BD creada
-    $user = getenv('REVISTA_DB_USER') ?: 'if0_42985270';
-    $password = getenv('REVISTA_DB_PASSWORD') ?: 'f93DNTQ5Sa';
-    $dsn = "mysql:host={$host};dbname={$name};charset=utf8mb4";
+    $config = [];
+    $localConfig = __DIR__ . '/database.local.php';
+    if (is_file($localConfig)) {
+        $config = require $localConfig;
+        if (!is_array($config)) {
+            throw new RuntimeException('La configuración local de la base de datos no es válida.');
+        }
+    }
+
+    $envFile = dirname(__DIR__, 2) . '/.env';
+    if (is_file($envFile)) {
+        $envConfig = parse_ini_file($envFile, false, INI_SCANNER_RAW);
+        if (is_array($envConfig)) {
+            $config = array_merge($envConfig, $config);
+        }
+    }
+
+    $host = getenv('REVISTA_DB_HOST') ?: ($config['DB_HOST'] ?? 'sql313.infinityfree.com');
+    $name = getenv('REVISTA_DB_NAME') ?: ($config['DB_NAME'] ?? 'if0_42985270_revista_digital');
+    $user = getenv('REVISTA_DB_USER') ?: ($config['DB_USER'] ?? 'if0_42985270');
+    $password = getenv('REVISTA_DB_PASSWORD') ?: ($config['DB_PASSWORD'] ?? '');
+    $port = getenv('REVISTA_DB_PORT') ?: ($config['DB_PORT'] ?? '3306');
+
+    if ($host === '' || $name === '' || $user === '' || $password === '') {
+        throw new RuntimeException('Falta configurar la contraseña de la base MySQL de InfinityFree.');
+    }
+
+    $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
 
     $connection = new PDO($dsn, $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

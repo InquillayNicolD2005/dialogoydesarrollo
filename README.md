@@ -17,4 +17,4 @@ Sitio web estático de DDP Noticias.
 - `vendor/`: librerías externas locales.
 - `boletines/`: archivos PDF de los boletines.
 
-Abre `index.html` desde XAMPP para revisar el sitio. Los recursos visuales y librerías referenciados por las páginas deben colocarse en las carpetas correspondientes de `assets/` y `vendor/`.
+El sitio está preparado para publicarse en InfinityFree mediante el workflow de GitHub Actions. Configura las credenciales MySQL y FTP siguiendo `admin/README.md`. Los recursos visuales y librerías referenciados por las páginas deben colocarse en las carpetas correspondientes de `assets/` y `vendor/`.

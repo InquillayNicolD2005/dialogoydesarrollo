@@ -14,7 +14,7 @@ try {
 } catch (Throwable $exception) {
     $counts = [];
     $recent = [];
-    $error = 'No se pudo cargar el panel. Verifica que MySQL esté iniciado y que la base revista_digital esté disponible.';
+    $error = 'No se pudo cargar el panel. Verifica la conexión MySQL configurada en InfinityFree.';
 }
 
 require __DIR__ . '/vistas/dashboard.php';

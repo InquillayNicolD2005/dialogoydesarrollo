@@ -21,4 +21,10 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /htdocs/
         clean: true
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          admin/config/database.local.php
+          .env
         

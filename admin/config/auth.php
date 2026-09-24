@@ -29,23 +29,20 @@ function requireAdmin(): void
     }
 }
 
-function authenticateAdmin(string $names, string $password): bool
+function authenticateAdmin(string $username, string $password): bool
 {
     $query = database()->prepare(
         "SELECT id, nombres, ap_paterno, ap_materno, rol, password_hash
          FROM usuarios
-         WHERE (nombres = :name OR email = :email)
+         WHERE nombres = :username
              AND rol = 'admin'
          LIMIT 1"
     );
-    $query->execute([
-        'name' => $names,
-        'email' => $names,
-    ]);
+    $query->execute(['username' => $username]);
     $admin = $query->fetch();
 
     $storedPassword = (string) ($admin['password_hash'] ?? '');
-    $validPassword = $storedPassword !== '' && (password_verify($password, $storedPassword) || hash_equals($storedPassword, $password));
+    $validPassword = $storedPassword !== '' && password_verify($password, $storedPassword);
     if (!$admin || !$validPassword) {
         return false;
     }
@@ -93,7 +90,7 @@ function changeAdminPassword(int $adminId, string $currentPassword, string $newP
     $admin = $query->fetch();
 
     $storedPassword = (string) ($admin['password_hash'] ?? '');
-    if (!$admin || ($storedPassword === '' || (!password_verify($currentPassword, $storedPassword) && !hash_equals($storedPassword, $currentPassword)))) {
+    if (!$admin || $storedPassword === '' || !password_verify($currentPassword, $storedPassword)) {
         return false;
     }
 
