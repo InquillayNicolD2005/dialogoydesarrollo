@@ -106,17 +106,9 @@ function changeAdminPassword(int $adminId, string $currentPassword, string $newP
 function createPasswordReset(string $email): ?string
 {
     $connection = database();
-    $connection->exec(
-        'CREATE TABLE IF NOT EXISTS password_resets (' .
-        'id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, ' .
-        'user_id INT UNSIGNED NOT NULL, ' .
-        'token_hash CHAR(64) NOT NULL, ' .
-        'expires_at DATETIME NOT NULL, ' .
-        'used_at DATETIME NULL, ' .
-        'created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, ' .
-        'INDEX (token_hash), INDEX (user_id)' .
-        ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
-    );
+    if (!databaseHasTable($connection, 'password_resets')) {
+        return null;
+    }
 
     $query = $connection->prepare("SELECT id FROM usuarios WHERE email = :email AND rol = 'admin' LIMIT 1");
     $query->execute(['email' => $email]);
@@ -141,6 +133,9 @@ function createPasswordReset(string $email): ?string
 function resetAdminPassword(string $token, string $newPassword): bool
 {
     $connection = database();
+    if (!databaseHasTable($connection, 'password_resets')) {
+        return false;
+    }
     $query = $connection->prepare(
         "SELECT id, user_id FROM password_resets WHERE token_hash = :token_hash AND used_at IS NULL AND expires_at > NOW() LIMIT 1"
     );
