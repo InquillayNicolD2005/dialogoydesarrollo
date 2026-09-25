@@ -17,6 +17,17 @@ $query = database()->prepare(sprintf("SELECT * FROM `%s` WHERE id = :id AND esta
 $query->execute(['id' => $id]);
 $row = $query->fetch();
 
+if ($type === 'noticias' && $row) {
+    $externalLink = trim((string) ($row['link_externo'] ?? ''));
+    $scheme = strtolower((string) parse_url($externalLink, PHP_URL_SCHEME));
+    if (filter_var($externalLink, FILTER_VALIDATE_URL) && in_array($scheme, ['http', 'https'], true)) {
+        header('Location: ' . $externalLink, true, 302);
+    } else {
+        header('Location: contenido.php?tipo=noticias', true, 302);
+    }
+    exit;
+}
+
 if (!$row) {
     http_response_code(404);
     $row = ['titulo' => 'Contenido no encontrado', 'fecha_publicacion' => null];
@@ -61,7 +72,7 @@ if ($type === 'reportajes' && !empty($row['id'])) {
                 <div class="col-lg-8">
                     <article class="blog-single-post">
                         <div class="post-content">
-                            <h1 class="title-single mb-3"><?= detailValue($title) ?></h1>
+                            <h2 class="title-single mb-3"><?= detailValue($title) ?></h2>
                             <p class="mb-3">
                                 <?php if (!empty($row['fecha_publicacion'])): ?><?= detailValue(date('d/m/Y', strtotime((string) $row['fecha_publicacion']))) ?><?php endif; ?>
                                 <?php if ($author !== ''): ?><?= !empty($row['fecha_publicacion']) ? ' | ' : '' ?>Por <?= detailValue($author) ?><?php endif; ?>
@@ -74,7 +85,7 @@ if ($type === 'reportajes' && !empty($row['id'])) {
                         <?php endif; ?>
                         <?php if ($image !== ''): ?>
                         <div class="single-post-image mb-4 text-center">
-                            <img src="<?= detailValue($image) ?>" alt="<?= detailValue($title) ?>" class="img-fluid w-100 radius-image">
+                            <img src="<?= detailValue($image) ?>" alt="<?= detailValue($title) ?>" class="img-fluid radius-image">
                         </div>
                         <?php endif; ?>
                         <?php if ($description !== ''): ?>
@@ -92,16 +103,16 @@ if ($type === 'reportajes' && !empty($row['id'])) {
                 </div>
                 <aside class="col-lg-4 left-text-9 mt-lg-0 mt-5 pl-lg-4">
                     <div class="left-top-9 mt-5 pt-sm-3">
-                        <h2 class="heading-small-text-9 mb-3">Últimos reportajes</h2>
+                        <h6 class="heading-small-text-9 mb-3">Últimos reportajes</h6>
                         <?php foreach ($latestReportages as $latest): ?>
                         <a href="detalle.php?tipo=reportajes&amp;id=<?= (int) $latest['id'] ?>" class="p-post d-block py-2">
-                            <h3 class="text-left-inner-9"><?= detailValue((string) $latest['titulo']) ?></h3>
+                            <h6 class="text-left-inner-9"><?= detailValue((string) $latest['titulo']) ?></h6>
                             <?php if (!empty($latest['fecha_publicacion'])): ?><span class="sub-inner-text-9"><?= detailValue(date('d/m/Y', strtotime((string) $latest['fecha_publicacion']))) ?></span><?php endif; ?>
                         </a>
                         <?php endforeach; ?>
                     </div>
                     <div class="categories mt-5 pt-sm-3">
-                        <h2 class="heading-small-text-9">Secciones</h2>
+                        <h6 class="heading-small-text-9">Secciones</h6>
                         <ul><li><a href="contenido.php?tipo=reportajes">Todos los reportajes</a></li><li><a href="index.html">Inicio</a></li></ul>
                     </div>
                 </aside>
