@@ -17,13 +17,7 @@ function contentTypes(): array
 function contentType(string $type): array
 {
     $types = contentTypes();
-    $definition = $types[$type] ?? $types['noticias'];
-    $statusColumn = $definition['status'] ?? null;
-    if ($statusColumn !== null && !databaseHasColumn(database(), $definition['table'], $statusColumn)) {
-        unset($definition['status'], $definition['db'][$statusColumn]);
-    }
-
-    return $definition;
+    return $types[$type] ?? $types['noticias'];
 }
 
 function contentSelect(array $definition): string

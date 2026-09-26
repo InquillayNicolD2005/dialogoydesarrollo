@@ -7,10 +7,8 @@ require_once __DIR__ . '/modelos/contenido.php';
 requireAdmin();
 
 $type = (string) ($_GET['tipo'] ?? $_POST['tipo'] ?? 'noticias');
-if (!array_key_exists($type, contentTypes())) {
-    $type = 'noticias';
-}
 $definition = contentType($type);
+$type = array_search($definition, contentTypes(), true) ?: 'noticias';
 $editingId = isset($_GET['editar']) ? (int) $_GET['editar'] : null;
 $error = null;
 $notice = null;
